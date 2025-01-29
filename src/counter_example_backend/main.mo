@@ -56,3 +56,9 @@ actor CounterCanister {
 - see the keyword await in front of the call of the methods
   await <objectName.methodName>
 */
+
+/*
+dfx canister call counter_example_backend increment
+dfx canister call counter_example_backend getStatus
+dfx canister call counter_example_backend decrement
+*/
