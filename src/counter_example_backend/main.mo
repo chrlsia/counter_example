@@ -46,3 +46,13 @@ actor CounterCanister {
     await myCounter.getCount();
   };
 };
+
+/*
+- class inside actor
+- of course creation of an objetc of class should be
+  outside the class definition
+- create 3 functions in order to call the corresponding methods
+  of the class
+- see the keyword await in front of the call of the methods
+  await <objectName.methodName>
+*/
