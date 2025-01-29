@@ -1,64 +1,47 @@
-// Import the necessary modules
+// Import necessary modules
+import Debug "mo:base/Debug";
 import Nat "mo:base/Nat";
-import Text "mo:base/Text";
 
-// Define the actor (main canister)
-actor CounterCanister {
+actor VehicleManager {
 
-  // Define the Counter class
-  class Counter(initialValue : Nat) {
-    // Mutable property
-    var count : Nat = initialValue;
+  // Base class: Car
+  class Car(_speed: Nat) {
+    var speed : Nat = _speed; // Instance variable to store the speed
 
-    // Method to increment the counter
-    public func increment() : async Text {
-      count := count + 1;
-      return "Counter incremented to " # Nat.toText(count);
+    // Public function to accelerate the car
+    public func accelerate(amount: Nat) {
+      speed += amount;
+      Debug.print("Car accelerated by " # Nat.toText(amount) # ", new speed: " # Nat.toText(speed));
     };
 
-    // Method to decrement the counter
-    public func decrement() : async Text {
-      if (count > 0) {
-        count := count - 1;
-      };
-      return "Counter decremented to " # Nat.toText(count);
-    };
-
-    // Method to get the current count
-    public func getCount() : async Text {
-      return "Current count is " # Nat.toText(count);
+    // Public function to get the current speed
+    public func getSpeed() : Nat {
+      return speed;
     };
   };
 
-  // Create an instance of the Counter class
-  let myCounter = Counter(5);
+  // Advanced class: RaceCar (contains a Car instance)
+  class RaceCar() {
+    let car: Car = Car(100); // Start with speed 100
 
-  // Public methods to interact with the counter
-  public func increment() : async Text {
-    await myCounter.increment();
+    // Public function to give the RaceCar a turbo boost
+    public func turboBoost() {
+      car.accelerate(50); // Increase speed by 50
+      Debug.print("Turbo boost activated! New speed: " # Nat.toText(car.getSpeed()));
+    };
+
+    // Public function to get the current speed of the RaceCar
+    public func getSpeed() : Nat {
+      return car.getSpeed();
+    };
   };
 
-  public func decrement() : async Text {
-    await myCounter.decrement();
+  // Create an instance of RaceCar
+  let myRaceCar = RaceCar();
+
+  // Public function to test the RaceCar
+  public func testRaceCar() : async Text {
+    myRaceCar.turboBoost();
+    return "RaceCar speed: " # Nat.toText(myRaceCar.getSpeed());
   };
-
-  public func getCount() : async Text {
-    await myCounter.getCount();
-  };
-};
-
-/*
-- class inside actor
-- of course creation of an objetc of class should be
-  outside the class definition
-- create 3 functions in order to call the corresponding methods
-  of the class
-- see the keyword await in front of the call of the methods
-  await <objectName.methodName>
-*/
-
-/*
-dfx canister call counter_example_backend increment
-dfx canister call counter_example_backend getStatus
-dfx canister call counter_example_backend decrement
-*/
+}
